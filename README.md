@@ -1,20 +1,101 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# AZBUR - Alyuminiy Profillar va Xizmatlar
 
-# Run and deploy your AI Studio app
+Zamonaviy alyuminiy konstruksiyalar va professional o'rnatish xizmatlari uchun veb-sayt. Loyiha React, TypeScript va Vite yordamida qurilgan.
 
-This contains everything you need to run your app locally.
+## Texnologiyalar
 
-View your app in AI Studio: https://ai.studio/apps/drive/1njRwU8RCerA-5QWxP8TucqasBm_enhIA
+- **React 19** - UI komponentlar
+- **TypeScript** - tip xavfsizligi
+- **Vite** - tez build tool
+- **Tailwind CSS** - styling
+- **Framer Motion** - animatsiyalar
+- **Lucide React** - ikonkalar
 
-## Run Locally
+## O'rnatish va Ishga Tushirish
 
-**Prerequisites:**  Node.js
+### Talablar
 
+- Node.js 18+
+- npm yoki yarn
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+### Lokaldа Ishlatish
+
+1. Repositoriyani klonlash:
+```bash
+git clone https://github.com/ashokhruzbek/azbur.git
+cd azbur
+```
+
+2. Bog'liqliklarni o'rnatish:
+```bash
+npm install
+```
+
+3. Environment o'zgaruvchilarni sozlash:
+
+`.env` faylini yarating va quyidagilarni kiriting:
+```env
+VITE_TELEGRAM_BOT_TOKEN=your_bot_token
+VITE_TELEGRAM_CHAT_ID=your_chat_id
+```
+
+4. Ishga tushirish:
+```bash
+npm run dev
+```
+
+Sayt `http://localhost:5173` da ochiladi.
+
+### Production Build
+
+```bash
+npm run build
+```
+
+Build natijasi `dist` papkasida bo'ladi.
+
+### Preview
+
+```bash
+npm run preview
+```
+
+## Loyiha Strukturasi
+
+```
+azbur/
+├── components/          # React komponentlar
+│   ├── ui/             # UI primitivlar
+│   ├── Hero.tsx        # Bosh sahifa
+│   ├── About.tsx       # Biz haqimizda
+│   ├── Services.tsx    # Xizmatlar
+│   ├── Products.tsx    # Mahsulotlar
+│   ├── Gallery.tsx     # Galereya
+│   ├── Contact.tsx     # Aloqa
+│   └── Footer.tsx      # Footer
+├── constants.ts        # Statik ma'lumotlar
+├── translations.ts     # Tarjimalar
+├── types.ts            # TypeScript turlar
+└── App.tsx             # Asosiy komponent
+```
+
+## Xususiyatlar
+
+- 📱 Responsive dizayn
+- 🌐 Ko'p tillilik (O'zbek, Rus)
+- 🎨 Zamonaviy UI/UX
+- ⚡ Tez yuklanish
+- 📬 Telegram bot integratsiyasi
+- 🖼️ Galereya va portfolio
+- 📞 Aloqa formasi
+
+## Aloqa
+
+Savollar yoki takliflar uchun:
+- 📞 Telefon: +998 94 234 0 234
+- 🌐 Veb-sayt: [azbur.uz](https://azbur.uz)
+- 📍 Manzil: Hazorasp, Xorazm
+
+## Litsenziya
+
+Bu loyiha shaxsiy foydalanish uchun mo'ljallangan.
