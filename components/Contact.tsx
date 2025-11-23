@@ -6,11 +6,13 @@ import { Translations } from '../types';
 
 const FloatingInput = ({ 
   label, 
+  name,
   type = "text", 
   required = false,
   isTextArea = false 
 }: { 
-  label: string, 
+  label: string,
+  name: string, 
   type?: string, 
   required?: boolean,
   isTextArea?: boolean 
@@ -19,12 +21,14 @@ const FloatingInput = ({
     <div className="relative group mt-6 first:mt-0">
        {isTextArea ? (
         <textarea 
+          name={name}
           required={required}
           className="peer w-full h-32 bg-transparent border-b-2 border-gray-200 py-2 pt-6 text-azbur-black outline-none transition-all duration-300 focus:border-azbur-red focus:border-b-[3px] placeholder-transparent resize-none leading-relaxed"
           placeholder=" "
         />
        ) : (
         <input 
+          name={name}
           required={required}
           type={type} 
           className="peer w-full bg-transparent border-b-2 border-gray-200 py-2 pt-6 text-azbur-black outline-none transition-all duration-300 focus:border-azbur-red focus:border-b-[3px] placeholder-transparent"
@@ -43,17 +47,47 @@ const FloatingInput = ({
 };
 
 const ContactForm = ({ t }: { t: Translations }) => {
-  const [status, setStatus] = useState<'idle' | 'submitting' | 'success'>('idle');
+  const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setStatus('submitting');
     
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    
-    setStatus('success');
-    setTimeout(() => setStatus('idle'), 3000);
+    const formData = new FormData(e.currentTarget);
+    const name = formData.get('name') as string;
+    const phone = formData.get('phone') as string;
+    const message = formData.get('message') as string;
+
+    const botToken = import.meta.env.VITE_TELEGRAM_BOT_TOKEN;
+    const chatId = import.meta.env.VITE_TELEGRAM_CHAT_ID;
+
+    const text = `🔔 *Yangi Murojaat*\n\n👤 *Ism:* ${name}\n📞 *Telefon:* ${phone}\n💬 *Xabar:* ${message || 'Xabar yo\'q'}`;
+
+    try {
+      const response = await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          chat_id: chatId,
+          text: text,
+          parse_mode: 'Markdown',
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Telegram API error');
+      }
+
+      setStatus('success');
+      (e.target as HTMLFormElement).reset();
+      setTimeout(() => setStatus('idle'), 3000);
+    } catch (error) {
+      console.error('Error sending message:', error);
+      setStatus('error');
+      setTimeout(() => setStatus('idle'), 3000);
+    }
   };
 
   if (status === 'success') {
@@ -68,11 +102,23 @@ const ContactForm = ({ t }: { t: Translations }) => {
      );
   }
 
+  if (status === 'error') {
+     return (
+       <div className="h-full flex flex-col items-center justify-center text-center">
+          <div className="w-20 h-20 bg-red-100 text-red-600 rounded-full flex items-center justify-center mb-6">
+             <span className="text-3xl">⚠️</span>
+          </div>
+          <h4 className="text-2xl font-bold text-azbur-black mb-2">Xatolik yuz berdi</h4>
+          <p className="text-gray-500">Iltimos qaytadan urinib ko'ring</p>
+       </div>
+     );
+  }
+
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-      <FloatingInput label={t.contact.name_label} required />
-      <FloatingInput label={t.contact.phone_label} type="tel" required />
-      <FloatingInput label={t.contact.message_label} isTextArea />
+      <FloatingInput name="name" label={t.contact.name_label} required />
+      <FloatingInput name="phone" label={t.contact.phone_label} type="tel" required />
+      <FloatingInput name="message" label={t.contact.message_label} isTextArea />
       
       <div className="mt-8">
         <Button 
